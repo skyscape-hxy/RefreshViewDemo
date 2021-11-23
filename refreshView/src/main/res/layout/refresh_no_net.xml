@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+<!--    <ImageView-->
+
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:background="@drawable/error_img"-->
+<!--        android:gravity="center"-->
+<!--        android:textSize="@dimen/sp_14" />-->
+
+    <TextView
+        android:id="@+id/error_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:autoLink="all"
+        android:gravity="center"
+        android:text="暂无网络"
+        android:drawableTop="@drawable/ic_no_net"
+        android:textColor="@color/c_e35a15"
+        android:textSize="@dimen/sp_12" />
+
+    <TextView
+        android:id="@+id/tv_retry"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"
+
+        android:gravity="center"
+        android:paddingVertical="@dimen/dp_10"
+        android:paddingHorizontal="@dimen/dp_30"
+        android:text="刷新"
+        />
+</LinearLayout>
