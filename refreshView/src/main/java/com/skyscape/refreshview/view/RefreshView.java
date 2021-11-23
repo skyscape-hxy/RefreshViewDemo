@@ -26,9 +26,11 @@ import com.skyscape.refreshview.Type;
 
 import java.util.List;
 
-public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,OnRefreshLoadMoreListener {
-    private View mNoDataView;
-    private NetDisconnectedView mNetDisconnectView;
+public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, OnRefreshLoadMoreListener {
+    private int mCurrentPage = 1;//当前页码
+    private int mPageSize = 20;//每页数据条数
+    private View mNoDataView;//无数据view
+    private NetDisconnectedView mNetDisconnectView;//无网络view
     private Context mContext;
     private FrameLayout mContainer;
     private RecyclerView.Adapter mAdapter;
@@ -56,7 +58,6 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,O
         setRefreshHeader(new MaterialHeader(mContext));
         setRefreshFooter(new ClassicsFooter(mContext));
         setOnRefreshLoadMoreListener(this);
-
     }
 
     public void setRefreshViewListener(RefreshViewListener<T> mRefreshViewListener) {
@@ -69,7 +70,7 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,O
     }
 
     @Override
-    public void showNetDisconnectedView(Type type) {
+    public void showNetDisconnectedView() {
 
     }
 
@@ -122,12 +123,25 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,O
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+        if (NetUtil.isNetworkConnected(mContext)){
+            removeNetDisconnectedView();
+        }else {
 
+        }
     }
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        mRefreshViewListener.requestRefresh(0, 0, null, (BindingAdapter<T>) mAdapter);
+        if (NetUtil.isNetworkConnected(mContext)) {
+            removeNetDisconnectedView();
+            mCurrentPage=1;
+            mRefreshViewListener.requestRefresh(mCurrentPage, mPageSize, refreshLayout, (BindingAdapter<T>) mAdapter);
+        } else {
+            if (mAdapter.getItemCount() == 0) {
+                showNetDisconnectedView();
+            }
+            refreshLayout.finishRefresh();
+        }
     }
 
     public interface RefreshViewListener<T> {

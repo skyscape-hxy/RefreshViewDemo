@@ -10,7 +10,7 @@ import com.skyscape.refreshview.Type;
 public interface IRefreshView {
     void setNetDisconnectedView(NetDisconnectedView netDisconnectedView);
 
-    void showNetDisconnectedView(Type type);
+    void showNetDisconnectedView();
 
     void removeNetDisconnectedView();
 
