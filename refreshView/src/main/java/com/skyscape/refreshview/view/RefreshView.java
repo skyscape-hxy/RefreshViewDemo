@@ -13,6 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener;
@@ -23,14 +26,12 @@ import com.skyscape.refreshview.Type;
 
 import java.util.List;
 
-public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView {
-    //    private View mNoDataView;
-//    private NetDisconnectedView mNetDisconnectView;
-//    private RecyclerView mRecyclerView;
-//    private SmartRefreshLayout mSmartRefreshLayout;
+public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,OnRefreshLoadMoreListener {
+    private View mNoDataView;
+    private NetDisconnectedView mNetDisconnectView;
     private Context mContext;
     private FrameLayout mContainer;
-    private Adapter mAdapter;
+    private RecyclerView.Adapter mAdapter;
 
     private RefreshViewListener<T> mRefreshViewListener;
     private RecyclerView mRv;
@@ -52,17 +53,9 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView {
         mRv = view.findViewById(R.id.recyclerView);
         mContainer = view.findViewById(R.id.container);
         mRv.setLayoutManager(new LinearLayoutManager(mContext));
-        setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-
-            }
-
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-mRefreshViewListener.requestRefresh(0,0,null, (BindingAdapter<T>) mAdapter);
-            }
-        });
+        setRefreshHeader(new MaterialHeader(mContext));
+        setRefreshFooter(new ClassicsFooter(mContext));
+        setOnRefreshLoadMoreListener(this);
 
     }
 
@@ -116,9 +109,9 @@ mRefreshViewListener.requestRefresh(0,0,null, (BindingAdapter<T>) mAdapter);
     }
 
     @Override
-    public void setAdapter(Adapter adapter) {
+    public void setAdapter(RecyclerView.Adapter adapter) {
         this.mAdapter = adapter;
-        mRv.setAdapter((RecyclerView.Adapter) adapter);
+        mRv.setAdapter(adapter);
     }
 
     @Override
@@ -126,20 +119,23 @@ mRefreshViewListener.requestRefresh(0,0,null, (BindingAdapter<T>) mAdapter);
         mRv.setLayoutManager(layout);
     }
 
+
     @Override
-    public void doRefresh() {
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
 
     }
 
     @Override
-    public void doLoadMore() {
-
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        mRefreshViewListener.requestRefresh(0, 0, null, (BindingAdapter<T>) mAdapter);
     }
 
     public interface RefreshViewListener<T> {
-        void requestLoadMore(int currentPage, int pageSize, RefreshLayout layout, BindingAdapter<T> adapter);
+        void requestLoadMore(int currentPage, int pageSize, RefreshLayout layout,
+                             BindingAdapter<T> adapter);
 
-        void requestRefresh(int currentPage, int pageSize, RefreshLayout layout, BindingAdapter<T> adapter);
+        void requestRefresh(int currentPage, int pageSize, RefreshLayout layout,
+                            BindingAdapter<T> adapter);
 
     }
 

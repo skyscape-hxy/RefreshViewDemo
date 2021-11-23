@@ -11,6 +11,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.skyscape.refreshview.Type;
 
@@ -47,29 +48,29 @@ public abstract class NetDisconnectedView extends FrameLayout {
     }
 
     private void initView() {
-        mContentView = inflate(mContext, setContentView(), this);
-        mRetryView=setRetryView();
-        mSmartRefreshLayout=setSmartRefreshLayout();
+//        mContentView = inflate(mContext, setContentView(), this);
+//        mRetryView=setRetryView();
+//        mSmartRefreshLayout=setSmartRefreshLayout();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mRetryView==null||mSmartRefreshLayout==null||mContentView==null){
-            Log.e(NetDisconnectedView.class.getName(), "onTouchEvent: --> 请检查view是否设置");
-            return false;
-        }
-        float x = mRetryView.getX();
-        float y = mRetryView.getY();
-        int w = mRetryView.getWidth();
-        int h = mRetryView.getHeight();
+//        if (mRetryView==null||mSmartRefreshLayout==null||mContentView==null){
+//            Log.e(NetDisconnectedView.class.getName(), "onTouchEvent: --> 请检查view是否设置");
+//            return false;
+//        }
+//        float x = mRetryView.getX();
+//        float y = mRetryView.getY();
+//        int w = mRetryView.getWidth();
+//        int h = mRetryView.getHeight();
         //判断是否在view点击范围内（点击范围扩展100）
-        boolean touched = event.getX() < x + w + 100 && event.getX() > x - 100 &&
-                event.getY() < y + h + 100 && event.getY() > y - 100;
-        if (mType == Type.REFRESH && touched) {
-            mSmartRefreshLayout .autoRefresh();
-        }else if (mType == Type.LOADMORE && touched) {
-            mSmartRefreshLayout.autoLoadMore();
-        }
+//        boolean touched = event.getX() < x + w + 100 && event.getX() > x - 100 &&
+//                event.getY() < y + h + 100 && event.getY() > y - 100;
+//        if (mType == Type.REFRESH && touched) {
+//            mSmartRefreshLayout .autoRefresh();
+//        }else if (mType == Type.LOADMORE && touched) {
+//            mSmartRefreshLayout.autoLoadMore();
+//        }
         return true;
     }
 

@@ -8,9 +8,9 @@ import android.widget.Adapter;
 
 import androidx.annotation.LayoutRes;
 
+
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener;
 import com.skyscape.refreshview.BindingAdapter;
 import com.skyscape.refreshview.BindingViewHolder;
 import com.skyscape.refreshview.R;
@@ -46,22 +46,22 @@ public class RefreshViewUtil<T> {
     }
 
     private void setNetDisconnectedView() {
-        mRefreshView.setNetDisconnectedView(new NetDisconnectedView(mContext) {
-            @Override
-            protected View setRetryView() {
-                return null;
-            }
-
-            @Override
-            protected SmartRefreshLayout setSmartRefreshLayout() {
-                return null;
-            }
-
-            @Override
-            protected int setContentView() {
-                return 0;
-            }
-        });
+//        mRefreshView.setNetDisconnectedView(new NetDisconnectedView(mContext) {
+//            @Override
+//            protected View setRetryView() {
+//                return null;
+//            }
+//
+//            @Override
+//            protected SmartRefreshLayout setSmartRefreshLayout() {
+//                return null;
+//            }
+//
+//            @Override
+//            protected int setContentView() {
+//                return 0;
+//            }
+//        });
     }
 
     public RefreshViewUtil<T> setAdapter(int br_id, int layoutId){
@@ -74,16 +74,16 @@ public class RefreshViewUtil<T> {
         return this;
     }
     public RefreshViewUtil<T> handleRefresh(){
-        mRefreshView.setAdapter((Adapter) mAdapter);
+        mRefreshView.setAdapter(mAdapter);
         mRefreshView.setRefreshViewListener(new RefreshView.RefreshViewListener<T>() {
             @Override
-            public void requestLoadMore(int currentPage, int pageSize, RefreshLayout layout,BindingAdapter<T> adapter) {
+            public void requestLoadMore(int currentPage, int pageSize, RefreshLayout layout, BindingAdapter<T> adapter) {
                 //mCallBack.requestLoadMore();
             }
 
             @Override
             public void requestRefresh(int currentPage, int pageSize, RefreshLayout layout, BindingAdapter<T> adapter) {
-mCallBack.requestRefresh(currentPage,pageSize,adapter);
+                    mCallBack.requestRefresh(currentPage,pageSize,adapter);
             }
         });
         return this;

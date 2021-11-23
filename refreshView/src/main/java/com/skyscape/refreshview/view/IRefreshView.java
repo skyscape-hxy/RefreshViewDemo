@@ -26,12 +26,9 @@ public interface IRefreshView {
 
     void removeErrorView();
 
-    void setAdapter(Adapter adapter);
+    void setAdapter(RecyclerView.Adapter  adapter);
 
     void setLayoutManager(RecyclerView.LayoutManager layout);
 
-    void doRefresh();
-
-    void doLoadMore();
 
 }

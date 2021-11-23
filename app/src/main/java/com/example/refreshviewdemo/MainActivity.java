@@ -5,6 +5,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.refreshviewdemo.databinding.ActivityMainBinding;
 import com.skyscape.refreshview.BindingAdapter;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         new RefreshViewUtil<String>(this,binding.container).
-                setAdapter(BR._all, android.R.layout.activity_list_item)
+                setAdapter(BR._all,R.layout.item)
                 .handleRefresh()
                 .setCallBack(new RefreshViewUtil.CallBack<String>() {
                     @Override
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void requestRefresh(int currentPage, int pageSize,  BindingAdapter<String> adapter) {
+                        Log.e("TAG", "requestRefresh:触发");
                             adapter.refresh(Arrays.asList("","",""));
                     }
 
