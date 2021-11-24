@@ -3,38 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:background="#fff"
     android:orientation="vertical">
 
-<!--    <ImageView-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_net"
+        android:gravity="center"
+        android:drawableTop="@drawable/ic_no_net"
+        android:drawablePadding="10dp"
+        android:textSize="12sp"/>
 
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:background="@drawable/error_img"-->
-<!--        android:gravity="center"-->
-<!--        android:textSize="@dimen/sp_14" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/error_retry"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:autoLink="all"-->
-<!--        android:gravity="center"-->
-<!--        android:text="暂无网络"-->
-<!--        android:drawableTop="@drawable/ic_no_net"-->
-<!--        android:textColor="@color/c_e35a15"-->
-<!--        android:textSize="@dimen/sp_12" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_retry"-->
-<!--        android:layout_width="@dimen/dp_120"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/dp_20"-->
-
-<!--        android:gravity="center"-->
-<!--        android:paddingVertical="@dimen/dp_10"-->
-<!--        android:paddingHorizontal="@dimen/dp_30"-->
-<!--        android:text="刷新"-->
-<!--        />-->
+    <TextView
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:background="@drawable/bg_r16_c333"
+        android:id="@+id/tv_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="点我重试" />
 </LinearLayout>

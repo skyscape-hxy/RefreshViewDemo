@@ -68,7 +68,7 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
 
     @Override
     public void setNetDisconnectedView(NetDisconnectedView netDisconnectedView) {
-
+        this.mNetDisconnectView = netDisconnectedView;
     }
 
     @Override
@@ -125,10 +125,10 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        if (NetUtil.isNetworkConnected(mContext)){
+        if (NetUtil.isNetworkConnected(mContext)) {
             mCurrentPage++;
-            mRefreshViewListener.requestLoadMore(mCurrentPage,mPageSize,refreshLayout, (BindingAdapter<T>) mAdapter);
-        }else {
+            mRefreshViewListener.requestLoadMore(mCurrentPage, mPageSize, refreshLayout, (BindingAdapter<T>) mAdapter);
+        } else {
             refreshLayout.finishLoadMore();
         }
     }
@@ -137,7 +137,7 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         if (NetUtil.isNetworkConnected(mContext)) {
             removeNetDisconnectedView();
-            mCurrentPage=1;
+            mCurrentPage = 1;
             mRefreshViewListener.requestRefresh(mCurrentPage, mPageSize, refreshLayout, (BindingAdapter<T>) mAdapter);
         } else {
             if (mAdapter.getItemCount() == 0) {

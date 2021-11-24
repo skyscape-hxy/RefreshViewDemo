@@ -46,22 +46,10 @@ public class RefreshViewUtil<T> {
     }
 
     private void setNetDisconnectedView() {
-//        mRefreshView.setNetDisconnectedView(new NetDisconnectedView(mContext) {
-//            @Override
-//            protected View setRetryView() {
-//                return null;
-//            }
-//
-//            @Override
-//            protected SmartRefreshLayout setSmartRefreshLayout() {
-//                return null;
-//            }
-//
-//            @Override
-//            protected int setContentView() {
-//                return 0;
-//            }
-//        });
+        NetDisconnectedView netDisconnectedView = new NetDisconnectedView(mContext);
+        netDisconnectedView.setCallBack(() -> mRefreshView.onRefresh(mRefreshView));
+        mRefreshView.setNetDisconnectedView(netDisconnectedView);
+
     }
 
     public RefreshViewUtil<T> setAdapter(int br_id, int layoutId){
