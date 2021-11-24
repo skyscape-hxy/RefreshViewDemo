@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +32,8 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
     private int mPageSize = 20;//每页数据条数
     private View mNoDataView;//无数据view
     private NetDisconnectedView mNetDisconnectView;//无网络view
-    private Context mContext;
+    private View mErrorView;//请求错误view
+    private final Context mContext;
     private FrameLayout mContainer;
     private RecyclerView.Adapter mAdapter;
 
@@ -124,9 +126,10 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
         if (NetUtil.isNetworkConnected(mContext)){
-            removeNetDisconnectedView();
+            mCurrentPage++;
+            mRefreshViewListener.requestLoadMore(mCurrentPage,mPageSize,refreshLayout, (BindingAdapter<T>) mAdapter);
         }else {
-
+            refreshLayout.finishLoadMore();
         }
     }
 
