@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
                                                RefreshViewUtil refreshViewUtil,
                                                RefreshView refreshView,
                                                BindingAdapter<String> adapter) {
-                        refreshViewUtil.handleData(Arrays.asList());
-                        refreshViewUtil.handleError();
+//                        refreshViewUtil.handleData(Arrays.asList());
+//                        refreshViewUtil.handleError();
                     }
 
 
