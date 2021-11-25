@@ -2,15 +2,10 @@ package com.skyscape.refreshview.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,19 +18,20 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener;
 import com.skyscape.refreshview.BindingAdapter;
 import com.skyscape.refreshview.NetUtil;
 import com.skyscape.refreshview.R;
-import com.skyscape.refreshview.Type;
 
+import java.util.Arrays;
 import java.util.List;
 
-public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, OnRefreshLoadMoreListener {
+public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,
+        OnRefreshLoadMoreListener {
     private int mCurrentPage = 1;//当前页码
     private int mPageSize = 20;//每页数据条数
     private View mNoDataView;//无数据view
-    private NetDisconnectedView mNetDisconnectView;//无网络view
+    private View mNetDisconnectView;//无网络view
     private View mErrorView;//请求错误view
     private final Context mContext;
     private FrameLayout mContainer;
-    private RecyclerView.Adapter mAdapter;
+    private BindingAdapter<T> mAdapter;
 
     private RefreshViewListener<T> mRefreshViewListener;
     private RecyclerView mRv;
@@ -67,53 +63,63 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
     }
 
     @Override
-    public void setNetDisconnectedView(NetDisconnectedView netDisconnectedView) {
+    public void setNetDisconnectedView(View netDisconnectedView) {
         this.mNetDisconnectView = netDisconnectedView;
     }
 
     @Override
     public void showNetDisconnectedView() {
+        if (null == mNetDisconnectView.getParent())
+            mContainer.addView(mNetDisconnectView);
 
     }
 
     @Override
     public void removeNetDisconnectedView() {
-
+        if (mNetDisconnectView.getParent()!=null) {
+            mContainer.removeView(mNetDisconnectView);
+        }
     }
 
     @Override
     public void setNoDataView(View noDataView) {
-
+        this.mNoDataView =  noDataView;
     }
 
     @Override
     public void showNoDataView() {
-
+        if (null == mNoDataView.getParent())
+            mContainer.addView(mNoDataView);
     }
 
     @Override
     public void removeNoDataView() {
-
+        if (mNoDataView.getParent()!=null) {
+            mContainer.removeView(mNoDataView);
+        }
     }
 
     @Override
     public void setErrorView(View errorView) {
-
+        this.mErrorView = errorView;
     }
 
     @Override
     public void showErrorView() {
-
+        if (null == mErrorView.getParent())
+            mContainer.addView(mErrorView);
     }
 
     @Override
     public void removeErrorView() {
-
+        if (mErrorView.getParent()!=null) {
+            mContainer.removeView(mErrorView);
+        }
     }
 
     @Override
     public void setAdapter(RecyclerView.Adapter adapter) {
-        this.mAdapter = adapter;
+        this.mAdapter = (BindingAdapter<T>) adapter;
         mRv.setAdapter(adapter);
     }
 
@@ -126,8 +132,7 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
         if (NetUtil.isNetworkConnected(mContext)) {
-            mCurrentPage++;
-            mRefreshViewListener.requestLoadMore(mCurrentPage, mPageSize, refreshLayout, (BindingAdapter<T>) mAdapter);
+            mRefreshViewListener.requestLoadMore(mCurrentPage, mPageSize, refreshLayout, mAdapter);
         } else {
             refreshLayout.finishLoadMore();
         }
@@ -138,13 +143,38 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
         if (NetUtil.isNetworkConnected(mContext)) {
             removeNetDisconnectedView();
             mCurrentPage = 1;
-            mRefreshViewListener.requestRefresh(mCurrentPage, mPageSize, refreshLayout, (BindingAdapter<T>) mAdapter);
+            mRefreshViewListener.requestRefresh(mCurrentPage, mPageSize, refreshLayout, mAdapter);
         } else {
             if (mAdapter.getItemCount() == 0) {
                 showNetDisconnectedView();
             }
+            setEnableLoadMore(false);//出现状态页时禁止加载更多
             refreshLayout.finishRefresh();
         }
+    }
+    public void handleData(List<T> data) {
+       removeErrorView();
+        if (data != null && data.size() > 0) {//有数据
+           removeNoDataView();
+            mAdapter.refresh(data);
+            mCurrentPage++;
+          setEnableLoadMore(true);
+        } else {
+          showNoDataView();
+           setEnableLoadMore(false);
+        }
+       finishRefresh();
+    }
+
+    public void handleError() {
+        removeNoDataView();
+        if (mAdapter.getItemCount() == 0) {
+           showErrorView();
+           setEnableLoadMore(false);
+        }else {
+            setEnableLoadMore(true);
+        }
+       finishRefresh();
     }
 
     public interface RefreshViewListener<T> {
@@ -155,6 +185,8 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView, 
                             BindingAdapter<T> adapter);
 
     }
+
+
 
 
 }
