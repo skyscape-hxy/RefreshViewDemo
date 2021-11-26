@@ -24,30 +24,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        new RefreshViewUtil<String>(this,binding.container)
-                .setAdapter(BR._all,R.layout.item)
+        new RefreshViewUtil<String>(this, binding.container)
+                .setAdapter(BR._all, R.layout.item)
                 .handleRefresh()
-                .setCallBack(new RefreshViewUtil.CallBack<String>() {
-                    @Override
-                    public void requestLoadMore(int currentPage, int pageSize, BindingAdapter<String> adapter) {
-
-                    }
-
-                    @Override
-                    public void requestRefresh(int currentPage, int pageSize,
-                                               RefreshViewUtil refreshViewUtil,
-                                               RefreshView refreshView,
-                                               BindingAdapter<String> adapter) {
-//                        refreshViewUtil.handleData(Arrays.asList());
-//                        refreshViewUtil.handleError();
-                    }
-
-
-
-                    @Override
-                    public void setPresentor(BindingViewHolder holder, String data, int position, BindingAdapter<String> adapter) {
-
-                    }
-                });
+                .setCallBack((currentPage, refreshView) -> refreshView.handleData(Arrays.asList()));
     }
 }

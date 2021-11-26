@@ -22,6 +22,7 @@ import com.skyscape.refreshview.R;
 import java.util.Arrays;
 import java.util.List;
 
+// TODO: 2021/11/26 扩展自定义状态页，设置分割线
 public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,
         OnRefreshLoadMoreListener {
     private int mCurrentPage = 1;//当前页码
@@ -132,7 +133,7 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
         if (NetUtil.isNetworkConnected(mContext)) {
-            mRefreshViewListener.requestLoadMore(mCurrentPage, mPageSize, refreshLayout, mAdapter);
+            mRefreshViewListener.requestLoadMore(mCurrentPage);
         } else {
             refreshLayout.finishLoadMore();
         }
@@ -143,7 +144,7 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,
         if (NetUtil.isNetworkConnected(mContext)) {
             removeNetDisconnectedView();
             mCurrentPage = 1;
-            mRefreshViewListener.requestRefresh(mCurrentPage, mPageSize, refreshLayout, mAdapter);
+            mRefreshViewListener.requestRefresh(mCurrentPage);
         } else {
             if (mAdapter.getItemCount() == 0) {
                 showNetDisconnectedView();
@@ -178,11 +179,9 @@ public class RefreshView<T> extends SmartRefreshLayout implements IRefreshView,
     }
 
     public interface RefreshViewListener<T> {
-        void requestLoadMore(int currentPage, int pageSize, RefreshLayout layout,
-                             BindingAdapter<T> adapter);
+        void requestLoadMore(int currentPage);
 
-        void requestRefresh(int currentPage, int pageSize, RefreshLayout layout,
-                            BindingAdapter<T> adapter);
+        void requestRefresh(int currentPage);
 
     }
 

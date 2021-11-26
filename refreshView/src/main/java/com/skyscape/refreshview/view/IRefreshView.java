@@ -27,6 +27,4 @@ public interface IRefreshView {
 
     void setLayoutManager(RecyclerView.LayoutManager layout);
 
-
-
 }

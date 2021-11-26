@@ -14,7 +14,7 @@ import androidx.annotation.RequiresApi;
 
 import com.skyscape.refreshview.R;
 
-// TODO: 2021/11/25 1.重试的水波纹待实现（暂时没有好的方案），2.引入xml改成addview
+// TODO: 2021/11/25 1.重试的水波纹待实现（暂时没有好的方案），2.引入xml改成addview,减少布局嵌套
 public class StatusView extends FrameLayout {
 
     private CallBack mCallBack;

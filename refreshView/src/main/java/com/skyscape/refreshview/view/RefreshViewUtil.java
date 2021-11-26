@@ -33,7 +33,7 @@ public class RefreshViewUtil<T> {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void initStuView() {
-        //框架默认状态页，根据具体情况进行配置
+        //框架默认状态页
         StatusView netDisconnectedView = new StatusView(mContext);
         StatusView noDataView = new StatusView(mContext);
         StatusView errorView = new StatusView(mContext);
@@ -48,13 +48,8 @@ public class RefreshViewUtil<T> {
                 mContext.getString(R.string.error_tip)));
     }
 
-    public RefreshView<T> getRefreshView() {
-        return mRefreshView;
-    }
-
-    public RefreshViewUtil setCallBack(CallBack<T> mCallBack) {
+    public void setCallBack(CallBack<T> mCallBack) {
         this.mCallBack = mCallBack;
-        return this;
     }
 
 
@@ -62,7 +57,7 @@ public class RefreshViewUtil<T> {
         mAdapter = new BindingAdapter<T>(mContext, br_id, layoutId) {
             @Override
             public void setPresentor(BindingViewHolder holder, int position, T data) {
-//mCallBack.setPresentor();
+                mCallBack.setPresentor(holder, position, data, mAdapter);
             }
         };
         return this;
@@ -72,33 +67,32 @@ public class RefreshViewUtil<T> {
         mRefreshView.setAdapter(mAdapter);
         mRefreshView.setRefreshViewListener(new RefreshView.RefreshViewListener<T>() {
             @Override
-            public void requestLoadMore(int currentPage, int pageSize, RefreshLayout layout,
-                                        BindingAdapter<T> adapter) {
-                //mCallBack.requestLoadMore();
+            public void requestLoadMore(int currentPage) {
+                mCallBack.requestLoadMore(currentPage, mRefreshView);
             }
 
             @Override
-            public void requestRefresh(int currentPage, int pageSize, RefreshLayout layout,
-                                       BindingAdapter<T> adapter) {
-                mCallBack.requestRefresh(currentPage, pageSize, RefreshViewUtil.this,
-                        mRefreshView, adapter);
+            public void requestRefresh(int currentPage) {
+                mCallBack.requestRefresh(currentPage, mRefreshView);
             }
         });
+        mRefreshView.autoRefresh();
         return this;
     }
 
 
-
-
     public interface CallBack<T> {
-        void requestLoadMore(int currentPage, int pageSize, BindingAdapter<T> adapter);
+        default void requestLoadMore(int currentPage, RefreshView<T> refreshView) {
+        }
 
-        void requestRefresh(int currentPage, int pageSize, RefreshViewUtil refreshViewUtil,
-                            RefreshView refreshView,
-                            BindingAdapter<T> adapter);
+        void requestRefresh(int currentPage, RefreshView<T> refreshView);
 
-        void setPresentor(BindingViewHolder holder, T data, int position,
-                          BindingAdapter<T> adapter);
+        default void setPresentor(BindingViewHolder holder, int position, T data,
+                                  BindingAdapter<T> adapter) {
+        }
+
     }
+
+
 
 }
